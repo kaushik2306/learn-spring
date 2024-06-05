@@ -17,7 +17,7 @@ public class DevInfraConfig implements IInfraConfig {
     @Value("${spring.profiles.active}")
     String profileName;
 
-   // @Value("${my-name}")
+    @Value("${my-name}")
     private String myName;
 
     @Override

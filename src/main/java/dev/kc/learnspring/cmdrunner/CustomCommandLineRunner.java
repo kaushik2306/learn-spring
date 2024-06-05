@@ -3,10 +3,11 @@ package dev.kc.learnspring.cmdrunner;
 import dev.kc.learnspring.service.RepoServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommandLineRunner implements org.springframework.boot.CommandLineRunner {
+public class CustomCommandLineRunner implements CommandLineRunner {
 
     private final RepoServices repoServices;
 
@@ -14,7 +15,7 @@ public class CommandLineRunner implements org.springframework.boot.CommandLineRu
 
 
 
-    public CommandLineRunner(RepoServices repoServices){
+    public CustomCommandLineRunner(RepoServices repoServices){
         this.repoServices = repoServices;
     }
 
