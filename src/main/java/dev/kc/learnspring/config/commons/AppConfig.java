@@ -4,19 +4,21 @@ import dev.kc.learnspring.config.dev.DevInfraConfig;
 import dev.kc.learnspring.config.prod.ProdInfraConfig;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource(value = "classpath:/myresource/props/app.properties")
+@ComponentScan(value = {"dev.kc.learnspring"})
 public class AppConfig {
 
     @Value("${server.port}")
     private Integer serverLocalPort;
 
     @Value("${app.version}")
-    private String appVersion;
+    private Double appVersion;/* The property mentioned in PropertySource is override with application properties file*/
 
     private final IInfraConfig infrastructureConfig;
 

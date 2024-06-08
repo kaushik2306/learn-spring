@@ -21,14 +21,16 @@ public class RepoServices {
 
     private String appVersion = "NOT_SET";
 
+
     public RepoServices(@Value("#{new Integer(environment['app.version'])*3}")String appVersion){
         this.appVersion = appVersion;
     }
 
     @Autowired
-    public RepoServices(@Qualifier(value="jpaRepoImpl") IRepo jpaRepoImplRepository, IRepo jdbcRepoImpl){
+    public RepoServices(@Qualifier(value="jpaRepoImpl") IRepo jpaRepoImplRepository, IRepo jdbcRepoImpl, @Value("#{new Double(environment['app.version'])*3}")String appVersion){
         this.jpaRepoImplRepository = jpaRepoImplRepository;//This repo is autowired by @Qualifier name
         this.jdbcRepository = jdbcRepoImpl;//This repo is autowired by field name
+        this.appVersion = appVersion;
     }
 
     @PostConstruct
