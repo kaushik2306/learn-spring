@@ -11,9 +11,9 @@ public class Service2 {
 
     private static final Logger log = LoggerFactory.getLogger(Service2.class);
 
-    private final Service1 service1;
+    private final IService service1;
 
-    public Service2(Service1 service1) {
+    public Service2(IService service1) {
         this.service1 = service1;
         log.info("{} Constructor",Service2.class.getSimpleName());
     }

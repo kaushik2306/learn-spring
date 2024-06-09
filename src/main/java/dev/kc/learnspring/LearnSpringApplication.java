@@ -1,10 +1,12 @@
 package dev.kc.learnspring;
 
 import dev.kc.learnspring.config.commons.AppConfig;
+import dev.kc.learnspring.initialization.CustomBeanFactoryPostProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
@@ -16,5 +18,10 @@ public class LearnSpringApplication extends SpringBootServletInitializer {
 		AppConfig appConfig = (AppConfig) applicationCtx.getBean("appConfig");
 		appConfig.testMe();
 	}
+
+//	@Bean
+//	public static CustomBeanFactoryPostProcessor customBeanFactoryPostProcessor(){
+//		return new CustomBeanFactoryPostProcessor();
+//	}
 
 }
