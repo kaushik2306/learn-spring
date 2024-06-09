@@ -1,5 +1,6 @@
 package dev.kc.learnspring.initialization;
 
+import dev.kc.learnspring.beans.DeprecatedTimepassBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -20,6 +21,7 @@ public class CustomBeanFactoryPostProcessor implements BeanFactoryPostProcessor 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         log.info("{} is a BeanFactoryPostProcessor",getClass().getSimpleName());
+        beanFactory.ignoreDependencyType(DeprecatedTimepassBean.class);
 //        PropertySourcesPlaceholderConfigurer cfg = new PropertySourcesPlaceholderConfigurer();
 //        cfg.setLocation(new FileSystemResource("tapp.properties"));
 //        Properties properties = new Properties();
