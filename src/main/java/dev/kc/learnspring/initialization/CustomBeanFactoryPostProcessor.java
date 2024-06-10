@@ -1,34 +1,42 @@
 package dev.kc.learnspring.initialization;
 
-import dev.kc.learnspring.beans.RecentTimepassBean;
+import dev.kc.learnspring.service.category.CategoryServiceV2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
-//import java.security.AccessController;
-//import java.security.PrivilegedAction;
-//import java.util.Collections;
-//import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Component
 public class CustomBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(CustomBeanFactoryPostProcessor.class);
 
-    private static final String ANNOTATION_METHOD = "annotationData";
 
-    private static final String ANNOTATIONS = "annotations";
+    @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        log.info("{} is a BeanFactoryPostProcessor",getClass().getSimpleName());
 
-//    private static final Constructor<?> AnnotationInvocationHandler_constructor;
+        String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
+
+        for (String beanDefinitionName : beanDefinitionNames){
+            BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanDefinitionName);
+            String beanClassName = beanDefinition.getBeanClassName();
+            if(beanClassName!=null){
+                if (beanClassName.equalsIgnoreCase(CategoryServiceV2.class.getName())) {
+                    beanDefinition.setPrimary(true);
+                }
+            }
+        }
+    }
+
+//    private static final String ANNOTATION_METHOD = "annotationData";
+//
+//    private static final String ANNOTATIONS = "annotations";
+
+    //    private static final Constructor<?> AnnotationInvocationHandler_constructor;
 //    private static final Constructor<?> AnnotationData_constructor;
 //    private static final Method Class_annotationData;
 //    private static final Field Class_classRedefinedCount;
@@ -67,58 +75,6 @@ public class CustomBeanFactoryPostProcessor implements BeanFactoryPostProcessor 
 //            throw new IllegalStateException(e);
 //        }
 //    }
-
-    @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        log.info("{} is a BeanFactoryPostProcessor",getClass().getSimpleName());
-
-        String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
-
-        for (String beanDefinitionName : beanDefinitionNames){
-            BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanDefinitionName);
-            String beanClassName = beanDefinition.getBeanClassName();
-            if (beanClassName != null && beanClassName.equalsIgnoreCase(RecentTimepassBean.class.getName())){
-                beanDefinition.setPrimary(true);
-//                log.info("FOUND THE RECENT BEAN");
-//
-//                try {
-//                    Class<?> beanClass = Class.forName(beanClassName);
-//
-//                    Primary newAnnotation = new Primary(){
-//
-//                        @Override
-//                        public Class<? extends Annotation> annotationType() {
-//                            return Primary.class;
-//                        }
-//                    };
-//
-//                    //putAnnotation(beanClass, Primary.class,newAnnotation);
-//
-//                    replaceAnnotation(beanClass, Primary.class,newAnnotation);
-//
-//
-//
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-
-            }else{
-                continue;
-            }
-
-        }
-
-
-//        PropertySourcesPlaceholderConfigurer cfg = new PropertySourcesPlaceholderConfigurer();
-//        cfg.setLocation(new FileSystemResource("tapp.properties"));
-//        Properties properties = new Properties();
-//        cfg.setIgnoreUnresolvablePlaceholders(true);
-//        properties.put("kc.name","run-time via bpp");
-//        cfg.setProperties(properties);
-//        System.setProperty("kc.name","spring");
-//        cfg.postProcessBeanFactory(beanFactory);
-    }
-
 
 //    public static <T extends Annotation> void putAnnotation(Class<?> c, Class<T> annotationClass, Map<String, Object> valuesMap){
 //        putAnnotation(c, annotationClass, annotationForMap(annotationClass, valuesMap));
@@ -176,25 +132,25 @@ public class CustomBeanFactoryPostProcessor implements BeanFactoryPostProcessor 
 //        });
 //    }
 
-    private void replaceAnnotation(Class<?> where, Class<? extends Annotation> annotationType, Annotation newAnnotation) {
-        try {
-            Method annotationMethod = where.getSuperclass().getClass().getDeclaredMethod(ANNOTATION_METHOD);
-            if(annotationMethod.trySetAccessible()){
-                annotationMethod.setAccessible(true);
-
-                Object annotationData = annotationMethod.invoke(where);
-
-                Field annotations = annotationData.getClass().getDeclaredField(ANNOTATIONS);
-                annotations.setAccessible(true);
-
-                Map<Class<? extends Annotation>, Annotation> annotationsMap =
-                        (Map<Class<? extends Annotation>, Annotation>) annotations.get(annotationData);
-                annotationsMap.put(annotationType, newAnnotation);
-            }
-
-
-        } catch (IllegalAccessException | NoSuchFieldException | NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void replaceAnnotation(Class<?> where, Class<? extends Annotation> annotationType, Annotation newAnnotation) {
+//        try {
+//            Method annotationMethod = where.getSuperclass().getClass().getDeclaredMethod(ANNOTATION_METHOD);
+//            if(annotationMethod.trySetAccessible()){
+//                annotationMethod.setAccessible(true);
+//
+//                Object annotationData = annotationMethod.invoke(where);
+//
+//                Field annotations = annotationData.getClass().getDeclaredField(ANNOTATIONS);
+//                annotations.setAccessible(true);
+//
+//                Map<Class<? extends Annotation>, Annotation> annotationsMap =
+//                        (Map<Class<? extends Annotation>, Annotation>) annotations.get(annotationData);
+//                annotationsMap.put(annotationType, newAnnotation);
+//            }
+//
+//
+//        } catch (IllegalAccessException | NoSuchFieldException | NoSuchMethodException | InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

@@ -1,20 +1,17 @@
-package dev.kc.learnspring.service;
+package dev.kc.learnspring.service.product;
 
+import dev.kc.learnspring.service.category.ICategoryService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Service1 implements IService{
+public class ProductService {
 
-    private static final Logger log = LoggerFactory.getLogger(Service1.class);
-
-    //@Value("${kc.name}")
-    private String propertyFromBpp;
+    private static final Logger log = LoggerFactory.getLogger(ProductService.class);
 
     /**
      * Concept of referring bean class members using SpEL
@@ -24,23 +21,20 @@ public class Service1 implements IService{
     @Value("#{repoServices.appVersion}")
     private Double myAppVersion;/* Concept of referring bean class members using SpEL*/
 
-    public Service1(Environment environment) {
-        log.info("{} Constructor {} {}",getClass().getSimpleName(),propertyFromBpp,environment.getProperty("kc.name"));
+    private final ICategoryService categoryService;
+
+    public ProductService(ICategoryService categoryService) {
+        log.info("{} Constructor invoked",getClass().getSimpleName());
+        this.categoryService = categoryService;
     }
 
     @PostConstruct
     public void init(){
-        log.info("{} post-construct myAppversion {} and prop-bpp {}",getClass().getSimpleName(),myAppVersion,propertyFromBpp);
+        log.info("{} post-construct myAppversion {}",getClass().getSimpleName(),myAppVersion);
     }
 
     @PreDestroy
     public void tearDown(){
         log.info("{} pre-destroy",getClass().getSimpleName());
     }
-
-    @Override
-    public String greetMessage() {
-        return getClass().getSimpleName()+" says Hello!!!";
-    }
-
 }

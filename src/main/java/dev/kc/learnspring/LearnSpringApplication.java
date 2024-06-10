@@ -19,9 +19,4 @@ public class LearnSpringApplication extends SpringBootServletInitializer {
 		appConfig.testMe();
 	}
 
-//	@Bean
-//	public static CustomBeanFactoryPostProcessor customBeanFactoryPostProcessor(){
-//		return new CustomBeanFactoryPostProcessor();
-//	}
-
 }
