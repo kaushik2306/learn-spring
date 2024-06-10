@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class RecentTimepassBean implements ITimepassBean{
     @Override
     public String toString() {
-        return "RecentTimepassBean{}";
+        return getClass().getSimpleName();
     }
 }

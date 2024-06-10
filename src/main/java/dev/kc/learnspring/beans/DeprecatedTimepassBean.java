@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Deprecated
-@Primary
+//@Primary
 public class DeprecatedTimepassBean implements ITimepassBean{
 
     @Override
     public String toString() {
-        return "DeprecatedTimepassBean{}";
+        return getClass().getSimpleName();
     }
 }

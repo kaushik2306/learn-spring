@@ -1,5 +1,7 @@
 package dev.kc.learnspring.initialization;
 
+import dev.kc.learnspring.beans.ITimepassBean;
+import dev.kc.learnspring.beans.RecentTimepassBean;
 import dev.kc.learnspring.service.Service1;
 import dev.kc.learnspring.service.Service3;
 import org.slf4j.Logger;
@@ -15,6 +17,8 @@ public class CustomBeanPostProcessor implements BeanPostProcessor {
 
     public Service3 service3;
 
+    public ITimepassBean timepassBean;
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         if(beanName.equalsIgnoreCase(Service1.class.getSimpleName()) && service3==null){
@@ -22,6 +26,11 @@ public class CustomBeanPostProcessor implements BeanPostProcessor {
             service3 = new Service3();
             return service3;
         }
+//        else if(beanName.equalsIgnoreCase(Deprecated.class.getSimpleName()) && timepassBean==null){
+//            log.info("{} after init. Bean-name:{}",getClass().getSimpleName(),beanName);
+//            timepassBean = new RecentTimepassBean();
+//            return timepassBean;
+//        }
         return bean;
     }
 
@@ -31,6 +40,10 @@ public class CustomBeanPostProcessor implements BeanPostProcessor {
             log.info("{} after init. Bean-name:{}",getClass().getSimpleName(),beanName);
             return service3;
         }
+//        else if (beanName.equalsIgnoreCase(Deprecated.class.getSimpleName()) && timepassBean!=null){
+//            log.info("{} after init. Bean-name:{}",getClass().getSimpleName(),beanName);
+//            return timepassBean;
+//        }
         return bean;
     }
 }
