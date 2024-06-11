@@ -35,8 +35,8 @@ public class CustomCommandLineRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         logger.info("Command line runner version {}",repoServices.getAppVersion());
         logger.info("Repo-Service name {}",repoServices.repoName());
-//        logger.info("CategoryServiceV2 name {}",categoryService);
-//        logger.info("ProductService name {}",productService);
+        logger.info("CategoryServiceV2 name {}",categoryService);
+        logger.info("ProductService name {}",productService);
         logger.info("ProductService test start");
         productService.test();
         logger.info("ProductService test end");
