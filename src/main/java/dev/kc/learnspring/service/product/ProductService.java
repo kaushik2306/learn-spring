@@ -5,6 +5,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,11 @@ public class ProductService {
     @Value("#{repoServices.appVersion}")
     private Double myAppVersion;/* Concept of referring bean class members using SpEL*/
 
-    private final ICategoryService categoryService;
+    private ICategoryService categoryService;
 
+    public ProductService(){}
+
+    @Autowired
     public ProductService(ICategoryService categoryService) {
         log.info("{} Constructor invoked",getClass().getSimpleName());
         this.categoryService = categoryService;
@@ -36,5 +40,9 @@ public class ProductService {
     @PreDestroy
     public void tearDown(){
         log.info("{} pre-destroy",getClass().getSimpleName());
+    }
+
+    public void test(){
+        log.info("{} Test me",this);
     }
 }

@@ -1,6 +1,8 @@
 package dev.kc.learnspring.service.category;
 
 import dev.kc.learnspring.service.category.subcategory.ISubCategoryService;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +35,15 @@ public class CategoryServiceV2 implements ICategoryService{
     public void setSubCategoryService(ISubCategoryService subCategoryService){
         log.info("{} setSubCategoryService setter-injection",getClass().getSimpleName());
         this.subCategoryService = subCategoryService;
+    }
+
+    @PostConstruct
+    public void init(){
+        log.info("{} post-construct invoked",getClass().getSimpleName());
+    }
+
+    @PreDestroy
+    public void tearDown(){
+        log.info("{} pre-destroy invoked",getClass().getSimpleName());
     }
 }
