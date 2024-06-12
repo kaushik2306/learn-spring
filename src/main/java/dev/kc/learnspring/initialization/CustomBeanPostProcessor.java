@@ -47,7 +47,7 @@ public class CustomBeanPostProcessor implements BeanPostProcessor {
     private Object cgLibProxyApproachOne(Object bean) throws Exception{
         CgLibMethodInterceptor interceptor = new CgLibMethodInterceptor(bean);
         Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(interceptor.getClass());
+        enhancer.setSuperclass(bean.getClass());
         //enhancer.setInterfaces(new Class<?>[] {MethodInterceptor.class});
         // enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);
         enhancer.setAttemptLoad(true);
