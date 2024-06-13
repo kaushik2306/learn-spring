@@ -1,0 +1,23 @@
+Limitation of AOP
+1. Non-private methods cannot be advice
+2. Only Spring Beans can be advice
+3. Method a() calls b() then advice will be executed for a() but not b().
+    Hence delegation is not possible
+
+Working
+1. If pointcut expression contains a class then the same pointcut is applied on sub-class as well
+2. @AfterThrowing Exception type must match otherwise given advice will not work
+3. @AfterReturning the return-type much match otherwise given advice will not work
+
+Notes on @AfterThrowing advice
+we can translate exception to a different type
+
+
+Sequence of AOP execution
+Around
+Before
+Before [any proxy interceptor like in our project JdkMethodInterceptors or CgLibMethodInterceptors]
+After [any proxy interceptor like in our project JdkMethodInterceptors or CgLibMethodInterceptors]
+AfterThrowing or AfterReturning
+After
+Around
