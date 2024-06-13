@@ -1,5 +1,6 @@
 package dev.kc.learnspring.service.product;
 
+import dev.kc.learnspring.model.ProductModel;
 import dev.kc.learnspring.service.category.ICategoryService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -8,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -44,5 +47,14 @@ public class ProductService {
 
     public void test(){
         log.info("{} Test me",this);
+    }
+
+    public List<ProductModel> findAllProducts(){
+        noImpactOfInterceptorOnInnerCalls();
+        return List.of(new ProductModel("XBOX"),new ProductModel("IPHONE"));
+    }
+
+    public void noImpactOfInterceptorOnInnerCalls(){
+        log.info("No impact of interceptor on inner method calls");
     }
 }

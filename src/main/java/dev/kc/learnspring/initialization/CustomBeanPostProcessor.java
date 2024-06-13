@@ -1,7 +1,7 @@
 package dev.kc.learnspring.initialization;
 
 import dev.kc.learnspring.interceptors.CgLibMethodInterceptor;
-import dev.kc.learnspring.interceptors.MethodLoggingInterceptors;
+import dev.kc.learnspring.interceptors.JdkMethodInterceptors;
 import dev.kc.learnspring.service.category.CategoryServiceV2;
 import dev.kc.learnspring.service.category.ICategoryService;
 import dev.kc.learnspring.service.category.subcategory.ISubCategoryService;
@@ -26,11 +26,11 @@ public class CustomBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         if(bean instanceof ICategoryService || bean instanceof ISubCategoryService){
-            log.info("{} postProcessBeforeInitialization",bean.getClass().getSimpleName());
+            log.info("[BEAN-POST-PROCESS] {} postProcessBeforeInitialization",bean.getClass().getSimpleName());
             if(bean instanceof CategoryServiceV2){
                 ProxyFactory proxyFactory = new ProxyFactory(bean);
-                proxyFactory.addAdvice(new MethodLoggingInterceptors());
-                log.info("Proxy of CategoryServiceV2 {}",proxyFactory);
+                proxyFactory.addAdvice(new JdkMethodInterceptors());
+                log.info("[BEAN-POST-PROCESS] Proxy of CategoryServiceV2 {}",proxyFactory);
                 return proxyFactory.getProxy();
             }
         }else if (bean instanceof ProductService) {
@@ -41,6 +41,14 @@ public class CustomBeanPostProcessor implements BeanPostProcessor {
             }
         }
 
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        if(bean instanceof ICategoryService || bean instanceof ISubCategoryService){
+            log.info("[BEAN-POST-PROCESS] {} postProcessAfterInitialization",bean.getClass().getSimpleName());
+        }
         return bean;
     }
 
@@ -63,11 +71,5 @@ public class CustomBeanPostProcessor implements BeanPostProcessor {
         return Enhancer.create(bean.getClass(),interceptor);
     }
 
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if(bean instanceof ICategoryService || bean instanceof ISubCategoryService){
-            log.info("{} postProcessAfterInitialization",bean.getClass().getSimpleName());
-        }
-        return bean;
-    }
+
 }

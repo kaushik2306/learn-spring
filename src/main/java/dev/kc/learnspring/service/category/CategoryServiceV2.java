@@ -1,5 +1,8 @@
 package dev.kc.learnspring.service.category;
 
+import dev.kc.learnspring.exceptions.CategoryNotFoundException;
+import dev.kc.learnspring.model.CategoryModel;
+import dev.kc.learnspring.model.SubCategoryModel;
 import dev.kc.learnspring.service.category.subcategory.ISubCategoryService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -27,8 +30,23 @@ public class CategoryServiceV2 implements ICategoryService{
     }
 
     @Override
-    public List<String> getLatestCategories() {
-        return List.of("Electronics","Beauty and Care");
+    public List<CategoryModel> getLatestCategories() {
+        this.noImpactOfInterceptorOnInnerCalls();
+        var electronics = subCategoryService.findSubCategories("ELECTRONICS");
+        var health = subCategoryService.findSubCategories("HEALTH");
+        return List.of(
+                new CategoryModel(1L,"ELECTRONICS",electronics),
+                new CategoryModel(2L,"HEALTH",health)
+        );
+    }
+
+    public void noImpactOfInterceptorOnInnerCalls(){
+        log.info("No impact of interceptor on inner method calls");
+    }
+
+    @Override
+    public CategoryModel getCategoryById(Long id){
+        throw new CategoryNotFoundException("Category with id %s is not found".formatted(id));
     }
 
     @Autowired

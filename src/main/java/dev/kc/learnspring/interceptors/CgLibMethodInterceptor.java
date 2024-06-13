@@ -21,13 +21,13 @@ public class CgLibMethodInterceptor implements MethodInterceptor {
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         String methodName = method.getName();
         Class<?> aClass = obj.getClass();
-        log.info("CGLIB BEFORE {} method in class {}",methodName,aClass.getSimpleName());
+        log.info("[CGLIB] BEFORE {} method in class {}",methodName,aClass.getSimpleName());
         Object proceed;
         try {
             proceed = proxy.invoke(bean,args);
-            log.info("CGLIB AFTER {} method in class {}",methodName,aClass.getSimpleName());
+            log.info("[CGLIB] AFTER {} method in class {}",methodName,aClass.getSimpleName());
         }catch (Exception e){
-            log.error("CGLIB AFTER-THROWING {} method in class {}",methodName,aClass.getSimpleName());
+            log.error("[CGLIB] AFTER-THROWING {} method in class {}",methodName,aClass.getSimpleName());
             throw e;
         }
         return proceed;

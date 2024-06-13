@@ -17,7 +17,7 @@ public class CustomBeanFactoryPostProcessor implements BeanFactoryPostProcessor 
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        log.info("{} is a BeanFactoryPostProcessor",getClass().getSimpleName());
+        log.info("[BEAN-FACTORY-POST-PROCESS] {} is a BeanFactoryPostProcessor",getClass().getSimpleName());
 
         String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
 
