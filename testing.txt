@@ -1,0 +1,12 @@
+For integration testing use below annotations
+
+There are two annotation in Junit5
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(<Configuration>.class)
+
+Alternatively, a new annotation is introduced and is recommended to use
+@SpringJUnitConfig(<Configuration>.class) -> use as class level annotation
+
+--------
+@Autowired
+Now you can autowire dependency at class level or the test method parameter level

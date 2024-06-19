@@ -15,9 +15,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 public class LearnSpringApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
-		ApplicationContext applicationCtx = SpringApplication.run(LearnSpringApplication.class, args);
-		AppConfig appConfig = (AppConfig) applicationCtx.getBean("appConfig");
-		appConfig.testMe();
+		ApplicationContext applicationCtx = SpringApplication.run(AppConfig.class, args);
+//		AppConfig appConfig = (AppConfig) applicationCtx.getBean("appConfig");
+//		appConfig.testMe();
 	}
 
 }
