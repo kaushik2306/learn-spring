@@ -15,13 +15,11 @@ public class AppConfig {
 
     private static final Logger log = LoggerFactory.getLogger(AppConfig.class);
 
-//    @Lazy
-//    @Value("${server.port}")
-//    private Integer serverLocalPort;
-//
-//    @Lazy
-//    @Value("${app.version}")
-//    private Double appVersion;/* The property mentioned in PropertySource is override with application properties file*/
+    @Value("${server.port:0}")
+    private int serverLocalPort;
+
+    @Value("${app.version}")
+    private double appVersion;/* The property mentioned in PropertySource is override with application properties file*/
 
     private final IInfraConfig infrastructureConfig;
 
@@ -35,17 +33,17 @@ public class AppConfig {
         //log.info("SERVER PORT IS {}",serverLocalPort);
     }
 
-//    public void testMe(){
-//        System.out.println(
-//                "==== JAVA-CONFIGURATION (LEARNING)"
-//                +"\nApplication name = "+ infrastructureConfig.getApplicationName()
-//                +"\napp-version = "+appVersion
-//                +"\nport = "+serverLocalPort
-//                +"\nprofile = "+ infrastructureConfig.getProfileName()
-//                +"\nobject-type = "+infrastructureConfig
-//                +"\nspecific-property from application-<profile>.properties (my-name) = "+infrastructureConfig.getMyName()
-//                +"\n=========="
-//        );
-//        System.out.println("APP VERSION = "+appVersion);
-//    }
+    public void testMe(){
+        System.out.println(
+                "==== JAVA-CONFIGURATION (LEARNING)"
+                +"\nApplication name = "+ infrastructureConfig.getApplicationName()
+                +"\napp-version = "+appVersion
+                +"\nport = "+serverLocalPort
+                +"\nprofile = "+ infrastructureConfig.getProfileName()
+                +"\nobject-type = "+infrastructureConfig
+                +"\nspecific-property from application-<profile>.properties (my-name) = "+infrastructureConfig.getMyName()
+                +"\n=========="
+        );
+        System.out.println("APP VERSION = "+appVersion);
+    }
 }
