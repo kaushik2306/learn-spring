@@ -16,11 +16,14 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 //@ContextConfiguration(classes = {TestConfig.class})
 //@TestPropertySource(properties = {"spring.profiles.active=test","spring.application.name=e-commerce","my-name=kaushik","app.version=1.0","server.port=81"})
 
+/**
+ * @SpringJUnitConfig this is a combination of two annotations @ExtendWith and @ContextConfiguration
+ */
 @SpringJUnitConfig(classes = {TestConfig.class})
 //@TestPropertySource(properties = {"spring.profiles.active=test"})
 @ActiveProfiles(value = {"test"})
 /* Note: We can use @TestPropertySource or @ActiveProfiles to active profile for our test
- *  Note: We can use @ActiveProfiles only on a JUnit test
+ * Note: We can use @ActiveProfiles only on a JUnit test
  * */
 
 //@TestPropertySource(properties = {"org.springframework.test.context.jdbc=DEBUG","org.springframework.jdbc.datasource.init=DEBUG"})
