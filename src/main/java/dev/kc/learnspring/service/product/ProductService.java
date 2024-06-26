@@ -8,7 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ProductService {
@@ -93,7 +95,13 @@ public class ProductService {
      */
     public List<ProductModel> findAllProductsUsingJdbcTemplate(){
         String sql = "SELECT * FROM PRODUCT";
-        return jdbcTemplate.query(sql,new ProductModelRowMapper());
+        /**
+         * Note: We can use either RowMapper or ResultSetExtractor both are fine
+         * RowMapper is used for one-to-one mapping
+         * ResultSetExtractor is majorly used when you want to combine some data and return your pojo
+         * */
+        //return jdbcTemplate.query(sql,new ProductModelRowMapper());
+        return jdbcTemplate.query(sql,new ProductModelResultSetExtractor());
     }
 
     /**
@@ -159,6 +167,34 @@ public class ProductService {
         @Override
         public ProductModel mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new ProductModel(rs.getLong("id"),rs.getString("name"));
+        }
+    }
+
+    private static class ProductModelResultSetExtractor implements ResultSetExtractor<List<ProductModel>>{
+
+        @Override
+        public List<ProductModel> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            List<ProductModel> productModelList = new ArrayList<>();
+            while (rs.next()){
+                productModelList.add(new ProductModel(rs.getLong("id"),rs.getString("name")));
+            }
+            return productModelList;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private static class ProductModelRowHandler implements RowCallbackHandler {
+
+        @Override
+        public void processRow(ResultSet rs) throws SQLException {
+            List<ProductModel> productModelList = new ArrayList<>();
+            while (rs.next()){
+                productModelList.add(new ProductModel(rs.getLong("id"),rs.getString("name")));
+            }
+            /**
+             * Push into some file or do some bach processing
+             * RowCallbackHandler will not return anything
+             * */
         }
     }
 }
