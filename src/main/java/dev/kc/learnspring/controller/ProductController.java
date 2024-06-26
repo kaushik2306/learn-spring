@@ -27,7 +27,8 @@ public class ProductController {
     @PostMapping("/")
     @CustomMethodAnnotation
     public ProductModel addProduct(@RequestBody ProductModel productModel){
-        return productService.addProduct(productModel);
+        //return productService.addProduct(productModel);
+        return productService.addProductUsingJdbcTemplate(productModel);
     }
 
     @GetMapping("/count")

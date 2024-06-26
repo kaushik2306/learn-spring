@@ -105,6 +105,25 @@ public class ProductService {
         return jdbcTemplate.queryForObject(sql,Long.class);
     }
 
+    /**
+     * API to add new Product into database<br>
+     * It uses JdbcTemplate
+     * @param productModel Product to add in database
+     * @return {@link ProductModel} updated Product after adding into database
+     */
+    public ProductModel addProductUsingJdbcTemplate(ProductModel productModel) {
+        String sql = "INSERT INTO PRODUCT(NAME) VALUES(?)";
+        jdbcTemplate.update(sql, productModel.name());
+        String fetchSql = "SELECT * FROM PRODUCT WHERE NAME=?";
+        return jdbcTemplate.queryForObject(fetchSql, new ProductModelRowMapper(),productModel.name());
+    }
+
+    /**
+     * API to add new Product into database<br>
+     * It uses LOW-LEVEL JDBC API to do the operation
+     * @param productModel Product to add in database
+     * @return {@link ProductModel} updated Product after adding into database
+     */
     public ProductModel addProduct(ProductModel productModel){
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection
