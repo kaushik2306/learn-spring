@@ -192,7 +192,7 @@ public class ProductService {
                 productModelList.add(new ProductModel(rs.getLong("id"),rs.getString("name")));
             }
             /**
-             * Push into some file or do some bach processing
+             * Push into some file or do some batch processing
              * RowCallbackHandler will not return anything
              * */
         }
