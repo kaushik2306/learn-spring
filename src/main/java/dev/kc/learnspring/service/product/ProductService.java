@@ -1,7 +1,11 @@
 package dev.kc.learnspring.service.product;
 
+import dev.kc.learnspring.dtos.ProductDto;
+import dev.kc.learnspring.model.CategoryModel;
 import dev.kc.learnspring.model.ProductModel;
+import dev.kc.learnspring.model.SubCategoryModel;
 import dev.kc.learnspring.service.category.ICategoryService;
+import dev.kc.learnspring.service.category.subcategory.SubCategoryService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
@@ -42,14 +46,20 @@ public class ProductService {
 
     private JdbcTemplate jdbcTemplate;
 
+    private SubCategoryService subCategoryService;
+
     public ProductService(){}
 
     @Autowired
-    public ProductService(ICategoryService categoryService,DataSource dataSource, JdbcTemplate jdbcTemplate) {
+    public ProductService(ICategoryService categoryService,
+                          DataSource dataSource,
+                          JdbcTemplate jdbcTemplate,
+                          SubCategoryService subCategoryService) {
         log.info("{} Constructor invoked",getClass().getSimpleName());
         this.categoryService = categoryService;
         this.dataSource = dataSource;
         this.jdbcTemplate = jdbcTemplate;
+        this.subCategoryService = subCategoryService;
     }
 
     @PostConstruct
@@ -77,7 +87,7 @@ public class ProductService {
              PreparedStatement ps = connection.prepareStatement("SELECT * FROM PRODUCT")){
             try(ResultSet rs = ps.executeQuery()){
                 while (rs.next()){
-                    productModelList.add(new ProductModel(rs.getLong("id"), rs.getString("name")));
+                    productModelList.add(new ProductModel(rs.getLong("id"), rs.getString("name"),null));
                 }
             }catch (SQLException e){
                 log.error("Error while fetching result-set of PRODUCT",e);
@@ -94,7 +104,18 @@ public class ProductService {
      * @return {@code List<ProductModel>}
      */
     public List<ProductModel> findAllProductsUsingJdbcTemplate(){
-        String sql = "SELECT * FROM PRODUCT";
+        String sql = """
+                SELECT 
+                    PRODUCT.ID AS PRODUCT_ID, 
+                    PRODUCT.NAME AS PRODUCT_NAME,
+                    SUBCATEGORY.ID AS SUB_CATEGORY_ID,
+                    SUBCATEGORY.NAME AS SUB_CATEGORY_NAME,
+                    CATEGORY.ID AS CATEGORY_ID,
+                    CATEGORY.NAME AS CATEGORY_NAME
+                FROM PRODUCT
+                JOIN SUBCATEGORY ON PRODUCT.SUB_CATEGORY_ID = SUBCATEGORY.ID
+                JOIN CATEGORY ON SUBCATEGORY.CATEGORY_ID = CATEGORY.ID
+                """;
         /**
          * Note: We can use either RowMapper or ResultSetExtractor both are fine
          * RowMapper is used for one-to-one mapping
@@ -119,11 +140,20 @@ public class ProductService {
      * @param productModel Product to add in database
      * @return {@link ProductModel} updated Product after adding into database
      */
-    public ProductModel addProductUsingJdbcTemplate(ProductModel productModel) {
-        String sql = "INSERT INTO PRODUCT(NAME) VALUES(?)";
-        jdbcTemplate.update(sql, productModel.name());
+    public ProductModel addProductUsingJdbcTemplate(ProductDto productDto) {
+
+        //CategoryModel categoryModel = subCategoryService.findCategory(productDto.productCategory());
+
+        String subCategoryName = productDto.productCategory();
+
+        String fetchSubCategorySql = "SELECT ID FROM SubCategory WHERE NAME=?";
+        Long subCategoryId = jdbcTemplate.queryForObject(fetchSubCategorySql, Long.class,subCategoryName);
+
+        String sql = "INSERT INTO PRODUCT(NAME,SUB_CATEGORY_ID) VALUES(?,?)";
+        jdbcTemplate.update(sql, productDto.productName(),subCategoryId);
+
         String fetchSql = "SELECT * FROM PRODUCT WHERE NAME=?";
-        return jdbcTemplate.queryForObject(fetchSql, new ProductModelRowMapper(),productModel.name());
+        return jdbcTemplate.queryForObject(fetchSql, new ProductModelRowMapper(),productDto.productName());
     }
 
     /**
@@ -144,7 +174,7 @@ public class ProductService {
                 fetch.setString(1,productModel.name());
                 try(ResultSet rs = fetch.executeQuery()){
                     while (rs.next()){
-                        return new ProductModel(rs.getLong("id"), rs.getString("name"));
+                        return new ProductModel(rs.getLong("id"), rs.getString("name"),null);
                     }
                 }catch (SQLException e){
                     log.error("Error while fetching result-set of PRODUCT",e);
@@ -176,7 +206,18 @@ public class ProductService {
         public List<ProductModel> extractData(ResultSet rs) throws SQLException, DataAccessException {
             List<ProductModel> productModelList = new ArrayList<>();
             while (rs.next()){
-                productModelList.add(new ProductModel(rs.getLong("id"),rs.getString("name")));
+                Long productId = rs.getLong("PRODUCT_ID");
+                String productName = rs.getString("PRODUCT_NAME");
+                Long subCategoryId = rs.getLong("SUB_CATEGORY_ID");
+                String subCategoryName = rs.getString("SUB_CATEGORY_NAME");
+                String categoryName = rs.getString("CATEGORY_NAME");
+                Long categoryId = rs.getLong("CATEGORY_ID");
+
+                CategoryModel categoryModel = new CategoryModel(categoryId,categoryName);
+                SubCategoryModel subCategoryModel = new SubCategoryModel(subCategoryId,subCategoryName,categoryModel);
+
+                ProductModel product = new ProductModel(productId,productName,subCategoryModel);
+                productModelList.add(product);
             }
             return productModelList;
         }

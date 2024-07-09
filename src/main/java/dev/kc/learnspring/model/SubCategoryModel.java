@@ -2,7 +2,8 @@ package dev.kc.learnspring.model;
 
 import java.util.StringJoiner;
 
-public record SubCategoryModel(Long id,String name) {
+public record SubCategoryModel(Long id,String name,CategoryModel categoryModel) {
+
     @Override
     public String toString() {
         return new StringJoiner(", ", SubCategoryModel.class.getSimpleName() + "[", "]")

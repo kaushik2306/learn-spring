@@ -35,8 +35,8 @@ public class CategoryServiceV2 implements ICategoryService{
         var electronics = subCategoryService.findSubCategories("ELECTRONICS");
         var health = subCategoryService.findSubCategories("HEALTH");
         return List.of(
-                new CategoryModel(1L,"ELECTRONICS",electronics),
-                new CategoryModel(2L,"HEALTH",health)
+                new CategoryModel(1L,"ELECTRONICS"),
+                new CategoryModel(2L,"HEALTH")
         );
     }
 

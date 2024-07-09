@@ -1,6 +1,7 @@
 package dev.kc.learnspring.controller;
 
 import dev.kc.learnspring.annotations.CustomMethodAnnotation;
+import dev.kc.learnspring.dtos.ProductDto;
 import dev.kc.learnspring.model.ProductModel;
 import dev.kc.learnspring.service.product.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,9 @@ public class ProductController {
 
     @PostMapping("/")
     @CustomMethodAnnotation
-    public ProductModel addProduct(@RequestBody ProductModel productModel){
+    public ProductModel addProduct(@RequestBody ProductDto productDto){
         //return productService.addProduct(productModel);
-        return productService.addProductUsingJdbcTemplate(productModel);
+        return productService.addProductUsingJdbcTemplate(productDto);
     }
 
     @GetMapping("/count")
