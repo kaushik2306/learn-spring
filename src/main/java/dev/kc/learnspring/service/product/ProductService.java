@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -103,6 +104,7 @@ public class ProductService {
      * FETCH ALL THE PRODUCT USING JDBC-TEMPLATE
      * @return {@code List<ProductModel>}
      */
+    @Transactional
     public List<ProductModel> findAllProductsUsingJdbcTemplate(){
         String sql = """
                 SELECT 
